@@ -1,0 +1,160 @@
+
+<div class="container" style="border: 0px solid black;">
+  <div class="row mt-3 mb-3" >
+    <div class=" col-lg-9 col-md-8 " *ngIf="!generalService.SYQ">
+      <div class="card mb-3">
+        <h5 class="card-header ">Welcome, {{participant.Name}}</h5>
+          <div class="card-body">
+            Email : {{participant.Email}}
+            <div class="form-row mt-3 justify-content-end">
+              <div class="col">
+                <button  (click)="scheduleQuiz()" class="form-control btn btn-primary">Start Quiz</button>
+              </div>
+              <div class="col">
+                <button (click)="showUpcomingEvents()" class="form-control btn btn-warning text-white">UPCOMING QUIZ</button>
+              </div>
+
+            </div>
+          </div>
+          <div *ngIf="!generalService.showUpcomingEvent">
+            <div class="card-header">
+              <div class="form-row">
+                <div class="col">
+                  <h5> Your Recent Score Cards</h5>
+                </div>
+
+                <div class="col d-flex justify-content-end">
+                  <a (click)="viewAllScoreCards()" class="btn btn-outline-primary">View All</a>
+                </div>
+              </div>
+                
+                <!-- <div class="col d-flex justify-content-end">
+                  <a href="" class="btn btn-outline-primary">Hide</a>
+                </div> -->
+
+            </div>
+            <div class="row  ml-1 pl-1" style="padding-left: px;">
+                <div class="card text-primary score-card col-lg-5 col-md-4 col-sm-6 ml-4 mt-3 mb-3 mr-4" style="margin : 1px;" *ngFor="let card of scoreCard" >
+                  <div class="card-body">
+                    <h5 class="card-title" *ngIf="card.EventID > 0"> Title : {{card.Title}} <span  class="badge badge-warning">Event</span></h5>
+                    <h6 class="card-title">Subject : {{card.SubjectName}} </h6>
+                    <p class="card-text">
+                      <span>{{ card.Date |date}}</span>
+
+                    </p>
+                    <p class="card-text">
+                      <span>Score : {{card.Score}}</span>
+                    </p>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+          <div *ngIf="generalService.showUpcomingEvent">
+            <div class="card-header">
+              <div class="form-row">
+                <div class="col">
+                  <h5> Upcoming quiz of your's</h5>
+                </div>
+
+                <div class="col d-flex justify-content-end">
+                  <a (click)="refreshAppliedQuiz()" class="btn btn-outline-success">Refresh</a>
+                  <a (click)="hideUpcomingEvent()" class="btn btn-outline-warning">Hide</a>
+                </div>
+              </div>
+
+
+          </div>
+            <div class="row  ml-1 pl-1" style="padding-left: px;">
+                <div class="card text-warning score-card-2  col-lg-5 col-md-4 col-sm-6 ml-4 mt-3 mb-3 mr-4" style="margin : 1px;" *ngFor="let event of generalService.appliedEvents" >
+                  <div class="card-body">
+                    <h6 class="card-title">Title : {{event.Title}}</h6>
+                    <p class="card-text">
+                      <span>{{ event.ExamDate |date}}</span>
+
+                    </p>
+                    <p class="card-text">
+                      <!-- <span>Score : {{card.Score}}</span> -->
+                    </p>
+                    <div class="form-group">
+                      <button (click)="attemptQuiz(event)" class="btn btn-warning text-white" [disabled]="!(((now | date)  === (event.ExamDate  | date)) && (( now | date:'hh:mm:ss' ) >= (event.ExamDate | date:'hh:mm:ss')) && (( now | date:'hh:mm:ss' ) <= (event.ExamEndDuration | date:'hh:mm:ss')))">Start Attempt</button>
+
+                        <!-- {{(((now | date)  === (event.ExamDate  | date)) && (( now | date:'mm:ss' ) >= (event.ExamDate | date:'mm:ss')) && (( now | date:'mm:ss' ) <= (event.ExamEndDuration | date:'mm:ss')))}} -->
+                      <!-- {{ (((now | date)  === (event.ExamDate  | date)) && (( now | date:'mm:ss' ) >= (event.ExamDate | date:'mm:ss')) && (( now | date:'mm:ss' ) <= (event.ExamEndDuration | date:'mm:ss'))) }} -->
+                      <!-- {{( now | date:'hh:mm:ss') < (event.ExamDate | date:'hh:mm:ss' )}}
+                      {{ event.ExamDate | date:'hh:mm:ss'}}
+                      {{ event.ExamEndDuration| date:'hh:mm:ss'}}
+
+                      {{ (( now | date:'hh:mm:ss' ) >= (event.ExamDate | date:'hh:mm:ss')) && (( now | date:'hh:mm:ss' ) <= (event.ExamEndDuration | date:'hh:mm:ss')) }} -->
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+
+
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-4" *ngIf="!generalService.SYQ" style="border: 0px solid black;">
+      <div class="card" >
+        
+        <h5 class="card-header ">Upcoming events   <span  *ngIf="generalService.events"  class="badge badge-danger">new</span></h5>
+        <div style="overflow-y: scroll; height:550px;">
+          <div class="card"  *ngFor="let event of generalService.events">
+            <div class="card-body text-primary pl-3 pr-3 pt-2 pb-2">
+              <h6 class="card-title">{{event.Title }}</h6>
+              Exam Date : <label for="" style="color: darkred;">  ( {{event.ExamDate | date}} )</label>
+              <button (click)="applyForEvent(event)" class="btn btn-primary">Apply</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="col-md-6 offset-md-3 mt-3" *ngIf="generalService.SYQ">
+        <div class="card ">
+            <h5 class="card-header text-center">Schedule Your Quiz </h5>
+
+                <div class="card-body">
+
+                    <form [formGroup]="generalService.examForm"  (ngSubmit)="startQuiz()" class="col s12">
+
+                        <div class="form-group">
+                            <select class="form-control" (change)="onSubjectChange($event)" formControlName="SubjectID">
+                              <option value="" disabled selected>Choose your subject</option>
+                              <option *ngFor="let subject of subjects" [ngValue]="subject.SubjectID">{{subject.SubjectName}}</option>
+                            </select>
+                            <span class="alert-danger" *ngIf="subject.touched && subject.errors?.required" >Please select your quiz subject!</span>
+                          </div>
+
+                        <div class="form-group">
+                          <label for="duration">Duration (in minutes)</label>
+                          <input class="form-control" formControlName="Duration" type="number">
+                          <span class="alert-danger" *ngIf="duration.touched && duration.errors?.required" >Please enter duration (in mins)!</span>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="password">NOQ (No. of Questions)</label>
+                          <input class="form-control" formControlName="NOQ" type="number">
+                          <span class="alert-danger" *ngIf="noq.touched && noq.errors?.required" >Please provide NOQ !</span>
+                        </div>
+
+                        <div class="form-group">
+                            <button [disabled]="generalService.examForm.invalid" class="form-control btn btn-primary">START</button>
+                        </div>
+
+                        <div class="form-group">
+                          <button (click)="cancelQuiz()" class="form-control btn btn-danger">CANCEL</button>
+                        </div>
+
+
+                    </form>
+                  </div>
+
+          </div>
+    </div>
+  </div>
+</div>
+

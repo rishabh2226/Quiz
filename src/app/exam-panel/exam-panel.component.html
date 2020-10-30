@@ -1,0 +1,116 @@
+<div class="container">
+    <div class="row" >
+        <div class="col-lg-10 col-md-8 col-sm-3 offset-lg-1 offset-md-2 offset-sm-1 mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>Name : {{generalService.examDetail.Name}} </td>
+    
+                                <td>Subject: {{ generalService.examDetail.SubjectName}} </td>
+    
+                                <td>Duration : {{generalService.examDetail.Duration}} minutes </td>
+    
+                                <td>Timer :  {{generalService.displayTimeElapsed()}} </td>
+    
+                                <td >
+                                    <button (click)="discard()" class="btn btn-danger">Discard</button>
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-10 col-md-8 col-sm-3 offset-lg-1 offset-md-2 offset-sm-1 mt-3 mb-3">
+            <div class="card" *ngIf="!generalService.isReportGenerated">
+                <h4 class="card-header">Question Paper</h4>
+                <div class="card-body">
+                    <div class="row justify-content-between">
+                        <div class="col-1">
+                            <button [disabled]="generalService.questionCount===0" (click)="moveToPreviousQuestion()" class="btn btn-primary">Previous</button>
+                        </div>
+                        <div class="col-1">
+                            <button [disabled]="generalService.questionCount===(generalService.totalQuestionToDisplay-1)"(click)="moveToNextQuestion()" class="btn btn-primary">Next</button>
+                        </div>
+                      </div>
+                    <table class="table mt-3" *ngIf="generalService.questions">
+  
+                        <tr>
+                            <td><u style="background-color: cornflowerblue;">Question {{ generalService.questionCount+1 }}</u> : {{generalService.questions[generalService.questionCount].QuestionText}} </td>
+                        </tr>
+                        <tr *ngFor="let option of generalService.questions[generalService.questionCount].options;let i =index">
+                            <td >
+                                <span [ngStyle]="{'background-color':Answer === option.Answer ? 'GREEN' : 'transparent' }">
+                                    <input type="radio" name="Options" (click)="radioValue($event)" [checked]="generalService.questions[generalService.questionCount].OptionSelected === option.OptionNumber" [Value]="option.OptionNumber">
+                                {{option.OptionText}}
+                                </span>
+                                
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td class="d-flex justify-content-around">
+                                <button (click)="showAnswer()" class="btn btn-success">Answer </button>
+                                <button (click)="generateReport()" class="btn btn-success">SUBMIT</button>
+                            </td>
+                        </tr> -->
+                    </table>
+                    <div class="row justify-content-center">
+                        <div class="col-2">
+                            <button (click)="showAnswer()" class="btn btn-warning text-white">Answer </button>
+                            
+                        </div>
+                        <div class="col-2">
+                            <button (click)="generateReport()" class="btn btn-success">SUBMIT</button>
+                        </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-md-10 offset-md-1 mt-3 mb-3">     
+            <div class="card" *ngIf="generalService.isReportGenerated">
+                <h4 class="card-header">
+                    Score Card 
+                </h4>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Total No. of question : </th>
+                            <td> {{ scoreCard.TotalQuestion}}</td>
+                        </tr>
+                        <tr>
+                            <th>No. of question attempted : </th>
+                            <td> {{ scoreCard.TotalAttempts}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <th>Questions left : </th>
+                            <td> {{ scoreCard.EmptyAttempts}}</td>
+                        </tr>
+                        <tr>
+                            <th>No. of correct attempt  : </th>
+                            <td>{{ scoreCard.CorrectAttempts}} </td>
+                        </tr>
+                        <tr>
+                            <th>No. of Wrong attempt  : </th>
+                            <td> {{ scoreCard.WrongAttempts}}</td>
+                        </tr>
+                        <tr>
+                            <th>Score: </th>
+                            <th> {{ scoreCard.Score}}</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2" >
+                                <button (click)="saveScoreCard()" class="btn btn-primary">Save</button>                              
+                            </th>
+                            
+                        </tr>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

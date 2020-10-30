@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="row mt-5 p-3" >
+        <div class="card score-card col-lg-4 col-md-4 col-sm-6 mt-3 p-3" *ngFor="let event of adminService.events" >
+            <div class="card-header">
+                <div class="form-row">
+                    <div class="col">
+                        {{ event.Title }} 
+                        
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        
+                        <button type="button" class="btn btn-info">
+                            Participants <span class="badge badge-light">{{event.NOP}}</span>
+                          </button>
+                        <!-- {{(now | date) > (event.ExamDate|date)}} -->
+                    </div>
+                </div>
+                
+            </div>
+            <div class="card-body p-3" >
+                <label class="text-center"><b>Subject :</b> {{event.SubjectName}}</label> 
+                <br>
+                <label for=""><b> Regitration Date :</b> </label>
+                <div class="form-row">
+                    
+                    <div class="col">
+                        <label><b>Start Date</b></label> <p>{{event.StartDate |date}} </p>
+                    </div>
+                    <div class="col">
+                        <label><b>Last Date </b></label> <p style="color:darkred">{{event.EndDate |date}}</p>
+                    </div>
+                </div>
+                <label><b>Exam Date</b></label> <p style="color:rgb(15, 235, 26)">{{event.ExamDate | date : 'medium'}}</p>
+                <label><b>Duration of quiz :</b></label> {{event.Duration}}   ||
+                <label><b>NOQ :</b></label> {{event.NOQ}}<br>
+                <label><b>Description :</b></label> {{event.Description}}
+                <br>
+                <!-- <button (click)="editEvent(event)" [disabled]="!((now | date : 'medium') > (event.ExamDate  | date : 'medium'))"class="btn btn-success text-white">Edit</button> -->
+                <button (click)="editEvent(event)" class="btn btn-success text-white">Edit</button>
+            </div>
+        </div>    
+    </div>
+</div>

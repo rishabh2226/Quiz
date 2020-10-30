@@ -1,0 +1,124 @@
+<div class="container">
+    <div *ngIf="!isEditModeOn" style="border: 0px solid black" class="col-lg-12 col-md-8 col-sm-4 offset-lg-0 offset-md-2 offset-sm-3 mt-3">
+        <div class="card">
+            <h5 class="card-header text-center">
+                Choose Subject
+            </h5>
+            <div class="card-body">
+                <div
+                    class="form-group col-lg-6 col-md-6 col-sm-6 offset-lg-3 offset-md-3 offset-sm-3 d-flex justify-content-center">
+                    <select class="form-control" [(ngModel)]="selectedSubject" (change)="onSubjectChnage()">
+                        <option value="0" selected disabled>Choose subject</option>
+                        <option *ngFor="let subject of subjects" [ngValue]="subject.SubjectID">{{subject.SubjectName}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div *ngIf="adminService.questions && !isEditModeOn" style="border: 0px solid black"
+        class="col-lg-12 col-md-8 col-sm-4 offset-lg-0 offset-md-2 offset-sm-3 mt-3 mb-3">
+        <div class="card card-repeat mt-3" *ngFor="let question of adminService.questions | paginate : config;let i=index">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-10 col-md-8 col-sm-6">
+                        <label style="background-color: grey; color: honeydew;">Question</label> : <label
+                            style="background-color:transparent;">{{question.QuestionText}}</label>
+                        <ul>
+                            <li *ngFor="let option of question.options;let y=index"
+                                [ngStyle]="{'background-color': question.options[y].Answer === 1 ? 'GREEN' : 'transparent','color': question.options[y].Answer === 1 ? 'white' : 'black'}">
+                                {{option.OptionText}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-1 col-md-4 col-sm-6 p-4">
+                        <div class="row m-2">
+                            <button (click)="turnEditModeOn(question)" data-toggle="tooltip" title="Edit" class="btn btn-primary"><i
+                                    class="fa fa-pencil fa-1x"></i></button>
+                        </div>
+                        <div class="row m-2">
+                            <button (click)="deleteQuestion(question)" data-toggle="tooltip" title="Delete"
+                                class="btn btn-danger"><i class="fa fa-trash fa-1x"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 col-md-8 col-sm-10 offset-lg-0 offset-md-1 offset-sm-2 mt-3">
+                <div class="d-flex justify-content-center">
+                    <pagination-controls (pageChange)="pageChange($event)" class="my-pagination">
+                    </pagination-controls>  
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div *ngIf="isEditModeOn" style="border: 0px solid black"
+        class="col-lg-12 col-md-8 col-sm-4 offset-lg-0 offset-md-2 offset-sm-3 mt-3 mb-3">
+        <div class="card mt-3">
+            <h4 class="card-header">
+                    Edit Question
+            </h4>
+            <div class="card-body">
+                
+                <div class="row">
+                    <div class="col-lg-10 col-md-8 col-sm-6 offset-lg-1 offset-md-2 offset-sm-3">
+                        <form [formGroup]="adminService.questionAnswerForm" (ngSubmit)="onUpdate()">
+                            <!-- <div class="form-group">
+                                <select class="form-control" formControlName="SubjectID" >
+                                    <option value="" disabled selected>Choose your subject</option>
+                                    <option  *ngFor="let subject of subjects"  [value]="subject.SubjectID">{{subject.SubjectName}}</option>
+                                  </select>
+                            </div> -->
+
+                    <div class="form-group">
+                        <textarea type="text"  formControlName="QuestionText" placeholder="Place question here.." cols="40" rows="2" class="form-control"></textarea>
+                        <span class="alert-danger" *ngIf="question.touched && question.errors?.required">Please provide question text!</span>
+                    </div>                                      
+
+                            
+                            <div class="form-row col-md-12">
+                                
+                                <div class="form-group col-md-11" formArrayName="Options" *ngFor="let option of adminService.questionAnswerForm.get('Options')['controls'];let i=index">
+                                    <div class="form-row" [formGroupName]="i">
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Option {{i+1}}" formControlName="OptionText" class="form-control">
+                                        </div>
+                                        <div class="form-group ml-3">
+                                            
+                                            <input type="radio" [(ngModel)]="isSelected" (change)="onAnswerSelect()" formControlName="Answer" [value]="i+1" name="Answer" >
+                                            Select 
+                                        </div>
+                                        <span class="alert-danger" *ngIf="opt.controls[i].get('OptionText').touched && opt.controls[i].get('OptionText').errors?.required">Please provide option - {{ i+1 }} text!</span>
+                                    </div>
+
+                                </div>
+                                
+                                <!-- <div class="form-group col-md-1">
+                                    <button type="button" [disabled]="adminService.questionAnswerForm.get('Options')['controls'].length===4" class="btn btn-primary" (click)="addOption()">+   </button>
+                                </div> -->
+                                
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <button [disabled]="adminService.questionAnswerForm.invalid" class="form-control btn btn-success">Update</button>
+                                </div>
+                                <div class="form-group col">
+                                    <button (click)="discard()" class="form-control btn btn-danger">Discard</button>
+                                </div>
+                                
+                            </div>
+                        </form>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

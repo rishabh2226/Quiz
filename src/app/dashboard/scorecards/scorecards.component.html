@@ -1,0 +1,45 @@
+<div class="container">
+    <div class="col-lg-12 col-md-10 col-sm-8 mt-2 offset-md-1 offset-lg-0">
+        <h3 class="card-header text-center"> Scorecard Details </h3>
+        <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar">
+
+            <table class="table table-bordered table-striped table-hover ">
+               
+                <thead class="thead-back text-white">
+                     <tr>
+                    <th>Sno.</th>
+                    <th>         Subject   <div style="width:70px;">
+                        <select (change)="filterScorecards($event)" class="form-control">
+                            <option value="" selected>All</option>
+                            <option *ngFor="let subject of subjects" [ngValue]="subject.SubjectID">{{subject.SubjectName}}</option>
+                        </select>
+                    </div></th>
+                    <th>Score Obtained</th>
+                    <th>NOQ</th>
+                    <th>Time Taken (min)</th>
+                    <th> Quiz/Event Duration</th>
+                    <th> Quiz/Event</th>
+                    <th>
+                         Date Of Quiz/Event
+                        <input class="form-control" type="date" (change)="datewiseFilter($event)">
+                    </th>              
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr  *ngFor="let card of scorecards; let i=index">
+                        <td>{{ i+1 }}</td>
+                        <td>{{ card.SubjectName }}</td>
+                        <td>{{ card.Score }}</td>
+                        <td>{{ card.TotalQuestion }}</td>
+                        <td>{{ card.TimeTaken }}</td>
+                        <td>{{ card.Duration }}</td>
+                        <td *ngIf="card.EventID > 0 ; else elseBlock">Event</td>
+                        <ng-template #elseBlock><td>Regular Quiz</td></ng-template>
+                        <td>{{ card.Date | date}}</td>
+                    </tr>                   
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

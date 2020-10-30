@@ -1,0 +1,7 @@
+.score-card:hover
+{
+    /* background-color: rgb(17, 32, 243); */
+    border:1px solid #007bff;
+    color:#007bff;
+ 
+} 

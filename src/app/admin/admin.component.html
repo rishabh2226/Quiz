@@ -1,0 +1,242 @@
+<div class="container">
+<div class="row mt-5 mb-3">
+    <div class="col-md-6">
+
+        <!-- Subjects  -->
+
+                <div class="card" *ngIf="!adminService.isSubjectFormOn">
+                    <h4 class="card-header">
+                        Subject
+                    </h4>
+                    <div class="card-body p-4">
+    
+                        
+                        <div class="row d-flex justify-content-center" *ngIf="!adminService.isSubjectFormOn">
+                            <div class="col-md-6">
+                                <button routerLink="/Add-Subject" class="form-control btn btn-primary">ADD & MANAGE</button>
+                            </div>
+
+                        </div>
+    
+                        
+                    </div>
+    
+                </div>
+
+        <!-- Subject area end -->
+
+        <!-- Event Area start -->
+
+            <div class="card" *ngIf="!adminService.isAddQuestionFormOn">
+                <h4 class="card-header">
+                    Event
+                </h4>
+                <div class="card-body p-4">
+
+                    
+                    <div class="row" *ngIf="!adminService.isEventFormOn">
+                        <div class="col-md-6">
+                            <button (click)="showEventForm()" class="form-control btn btn-primary">ADD</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button routerLink="/manage-events"
+                                class="form-control btn btn-warning text-white">MANAGE</button>
+                        </div>
+                    </div>
+
+                    <div class="card p-3 " *ngIf="adminService.isEventFormOn">
+                        <h6 class="card-header">CREATE</h6>
+                        <div class="row mt-3">
+                            
+                            <div class="col-md-12">
+                                <form [formGroup]="adminService.eventForm" (ngSubmit)="onEventSubmit()">
+                                    <div class="form-group">
+                                        <select class="form-control" formControlName="SubjectID">
+                                            <option value="" disabled selected>Choose your subject</option>
+                                            <option *ngFor="let subject of subjects" [ngValue]="subject.SubjectID">
+                                                {{subject.SubjectName}}</option>
+                                        </select>
+                                        <span class="alert-danger" *ngIf="subjectID.touched && subjectID.errors?.required">Please select subject!</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="">Event Description : </label> -->
+                                        <textarea placeholder="Place event title here.." formControlName="Title" class="form-control"></textarea>
+                                        <span class="alert-danger" *ngIf="title.touched && title.errors?.required">Title is required!</span>
+                                    </div>
+
+                                    <div class="form-row">
+                                        
+                                        <div class="form-group col">
+                                            <label for="">Registration Date From : </label>
+                                            <input type="date" formControlName="StartDate" class="form-control">
+                                            <span class="alert-danger" *ngIf="startDate.touched && startDate.errors?.required">Event start date is required!</span>
+                                        </div>
+                                        <div class="form-group col">
+                                            <label for="">To : </label>
+                                            <input type="date" formControlName="EndDate" class="form-control">
+                                            <span class="alert-danger" *ngIf="endDate.touched && endDate.errors?.required">Event end date is required!</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Event Date : </label>
+                                        <input type="datetime-local" formControlName="ExamDate" class="form-control">
+                                        <span class="alert-danger" *ngIf="examDate.touched && examDate.errors?.required">Event date is required!</span>
+                                        <!-- {{adminService.event.ExamDate | date : 'MM-dd-yyyy'}} -->
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="">Event Description : </label> -->
+                                        <input type="number" placeholder="Input duration of event here..." formControlName="Duration" class="form-control">
+                                        <span class="alert-danger" *ngIf="duration.touched && duration.errors?.required">Duration is required!</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="">Event Description : </label> -->
+                                        <input type="number" placeholder="Input No. of questions" formControlName="NOQ" class="form-control">
+                                        <span class="alert-danger" *ngIf="noq.touched && noq.errors?.required">NOQ is required!</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="">Event Description : </label> -->
+                                        <textarea placeholder="Place event description here.." formControlName="Description" class="form-control"></textarea>
+                                        <span class="alert-danger" *ngIf="description.touched && description.errors?.required">Description is required!</span>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col">
+                                            <button [disabled]="adminService.eventForm.invalid"class="form-control btn btn-success">Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="form-row">
+                                    <div class="form-group col">
+                                        <button (click)="discard('event')"
+                                            class="form-control btn btn-danger">Discard</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        <!-- Event area end -->
+
+        <!-- Question area start     -->
+
+            <div class="card mt-0" *ngIf="!adminService.isEventFormOn">
+                <h4 class="card-header">
+                    Questions
+                </h4>
+                <div class="card-body p-4">
+                    <div class="row" *ngIf="!adminService.isAddQuestionFormOn">
+                        <div class="col-md-6">
+                            <button (click)="showAddQuestionForm()" class="form-control btn btn-primary">ADD</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button routerLink="/manage-questions"
+                                class="form-control btn btn-warning text-white">MANAGE</button>
+                        </div>
+
+                    </div>
+                    <div class="card p-2" *ngIf="adminService.isAddQuestionFormOn">
+                        <h6 class="card-header">ADD</h6>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <form [formGroup]="adminService.questionAnswerForm" (ngSubmit)="onSubmit()">
+                                    <div class="form-group">
+                                        <select class="form-control" formControlName="SubjectID">
+                                            <option value="" disabled selected>Choose your subject</option>
+                                            <option *ngFor="let subject of subjects" [ngValue]="subject.SubjectID">
+                                                {{subject.SubjectName}}</option>
+                                        </select>
+                                        <span class="alert-danger" *ngIf="subject.touched && subject.errors?.required">Please select subject!</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <textarea type="text" formControlName="QuestionText"
+                                            placeholder="Place question here.." cols="40" rows="2"
+                                            class="form-control"></textarea>
+                                        <span class="alert-danger" *ngIf="question.touched && question.errors?.required">Please provide question text!</span>
+                                    </div>
+
+
+                                    <div class="form-row col-md-12">
+
+                                        <div class="form-group col-md-9" formArrayName="Options"
+                                            *ngFor="let option of adminService.questionAnswerForm.get('Options')['controls'];let i=index">
+                                            <div class="form-row" [formGroupName]="i">
+                                                <div class="form-group">
+                                                    <input type="text" placeholder="Option {{i+1}}"
+                                                        formControlName="OptionText" class="form-control">
+                                                </div>
+                                                <div class="form-group ml-3">
+
+                                                    <input type="radio" [(ngModel)]="isSelected"
+                                                        (change)="onAnswerSelect()" formControlName="Answer"
+                                                        [value]="i+1" name="Answer">
+                                                    Answer
+                                                </div>
+                                                <span class="alert-danger" *ngIf="opt.controls[i].get('OptionText').touched && opt.controls[i].get('OptionText').errors?.required">Please provide option text!</span>
+                                                
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-1">
+                                            
+                                            <button type="button"
+                                                [disabled]="adminService.questionAnswerForm.get('Options')['controls'].length===4"
+                                                class="btn btn-primary" (click)="addOption()">+ </button>
+                                        </div>
+                                        <div class="form-group col-md-1">
+                                            
+                                            <button type="button"
+                                                [disabled]="adminService.questionAnswerForm.get('Options')['controls'].length===1"
+                                                class="btn btn-warning text-white" (click)="deleteOption(adminService.questionAnswerForm.get('Options')['controls'].length)">- </button>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col">
+                                            <button [disabled]="adminService.questionAnswerForm.invalid" class="form-control btn btn-success">Save</button>
+                                        </div>
+                                        <div class="form-group col">
+                                            <button (click)="discard('addQuestion')"
+                                                class="form-control btn btn-danger">Discard</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        <!--  Question area end  -->
+
+    </div>
+        <!-- chart start-->
+
+        <div class="col-md-6">
+            <div class="card">
+                <h4 class="card-header">
+                    Summary (Question / Subject)
+                </h4>
+                <div class="card-body">
+
+                    <div   class="col-md-10 col-lg-8 col-sm-8 offset-md-1 offset-sm-2 offset-lg-2">
+                        <canvas responsive="true" id="myChart" width="300" height="300"></canvas>
+                    </div>
+                   
+                    <!-- <li *ngFor="let d of summaryDataPoint">{{d.name}} : {{d.y}}</li> -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart end  -->
+</div>
+</div>

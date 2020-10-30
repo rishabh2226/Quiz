@@ -1,0 +1,14 @@
+
+.score-card:hover
+{
+    /* background-color: yellow; */
+    border:1px solid #007bff;
+
+}
+
+.score-card-2:hover
+{
+    /* background-color: yellow; */
+    border:1px solid #f8bb05;
+
+}

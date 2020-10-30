@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-lg-6 col-md-8 col-sm-12 ">
+            <div class="card p-3 " >
+                <h6 class="card-header text-center">ADD SUBJECTS</h6>
+                <div class="row mt-3">
+                    
+                    <div class="col-md-12">
+                        <form [formGroup]="adminService.subjectForm" (ngSubmit)="onSubjectFormSubmit()">
+                            
+                            <div class="form-group">
+                                <label for="">Subjet Name </label>
+                                <input type="text" placeholder="Enter Subject Name" formControlName="SubjectName" class="form-control">
+                                <span class="alert-danger" *ngIf="sub.touched && sub.errors?.required">Subject Name is required!</span>
+                            </div>
+            
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <button [disabled]="adminService.subjectForm.invalid"class="form-control btn btn-success">Save</button>
+                                </div>
+                                <div class="form-group col">
+                                    <button routerLink="/admin"
+                                        class="form-control btn btn-danger">Discard</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+            
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-8 col-sm-12 ">
+            <div class="card p-3">
+                <h6 class="card-header text-center">Subject-List</h6>
+                <div style="overflow-y: scroll; height:550px;">
+                    <div class="card mt-1" *ngFor="let s of subjects">
+                        <div class="card-body">
+    
+                            <div class="d-flex bd-highlight" >
+    
+                                <div class="p-2 flex-grow-1 bd-highlight">{{s.SubjectName}} ({{s.NOQ}}) </div>
+    
+                                <div class="p-2 bd-highlight">
+                                    <button (click)="editSubject(s)" data-toggle="tooltip" title="Edit" class="btn btn-primary"><i
+                                    class="fa fa-pencil fa-1x"></i></button>
+                                </div>
+    
+                                <div class="p-2 bd-highlight">
+                                    <button (click)="deleteSubject(s)" [disabled]="s.NOQ != 0" data-toggle="tooltip" title="Delete"
+                                    class="btn btn-danger"><i class="fa fa-trash fa-1x"></i></button>
+                                </div>
+    
+                              </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+

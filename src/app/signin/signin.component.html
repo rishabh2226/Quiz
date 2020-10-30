@@ -1,0 +1,37 @@
+
+  <div class="container">
+      
+    <div class="row mt-5" >
+          <div class="col-md-6 offset-md-3">
+            <div class="card ">
+                <h4 class="card-header text-center">
+                    Signin
+                </h4>
+                <!-- Registration form  -->
+                <div class="card-body">
+                    <form [formGroup]="generalService.loginForm" (ngSubmit)="onSignin()" class="col s12">
+                        <div class="form-group">
+                          <label for="email">Email</label>
+                          <input class="form-control" type="email" formControlName="Email">                        
+                          <span class="alert-danger" *ngIf="loginEmail.touched && loginEmail.errors?.required">Please fill your email here!</span>
+                          
+                          <span class="alert-danger" *ngIf="loginEmail.touched && loginEmail.errors?.email">Please fill your valid email here!</span>
+                        </div>
+                        <div class="form-group">
+                          <label for="password">Password</label>
+                          <input class="form-control" formControlName="Password" id="password" type="password" >                        
+                          <span class="alert-danger" *ngIf="loginPassword.touched && loginPassword.errors?.required">Please fill your password here!</span>
+                          <span class="alert-danger" *ngIf="loginPassword.touched && loginPassword.errors?.minlength">Password must be of 8 characters!</span>
+                        </div>
+                        <div class="form-group">
+                            <button [disabled]="generalService.loginForm.invalid" class="btn btn-primary form-control">SIGNIN</button>
+                        </div>
+                    </form>
+                    <span class="d-flex justify-content-center">New Participants,<a routerLink="/signup">Click here..</a></span>
+                  </div>
+            </div>
+          </div>
+    </div>
+
+
+  </div>
